@@ -2333,34 +2333,14 @@
             edges.push({ source: sourceNode, target: targetNode });
         });
 
-        data.TopologyNodes.forEach(function (node, index) {
-            node.id = node.device_id;
-        });
-
         var nodes = data.TopologyNodes;
         //filter for groups in region.
         var regionGroups = _.groupBy(data.TopologyNodes, "in_region");
+        var regionArray = Object.keys(regionGroups);
+        console.log("REGION GROUPS:", regionArray)
 
-        //function takes node and returns group: 
-        function identifyRegionNode(node) {
-            switch (node.in_region) {
-                case '2af4cdcd-c751-40a3-abbe-ef6557588fd0':
-                    return 1;
-                case '94667f3f-9ac4-4bcd-a016-5d270168c08b':
-                    return 2;
-                case 'c0f7a75b-5c41-4d4f-83f2-218c0b049281':
-                    return 3;
-                case 'd77b007c-d784-4cc5-8a27-fd24d3fcd566':
-                    return 4;
-                case 'ecf776e0-23ef-4388-9d92-fb04f8df110a':
-                case 'Papayas':
-                    return 5;
-                default:
-                    return 6;
-            }
-        }
 
-        var colors = ["#996666", "#66CCCC",
+        var colors = ["#66CCCC",
             "#FFFF99", "#CC9999",
             "#666633", "#993300",
             "#ff9966", "#339999",
@@ -2405,8 +2385,8 @@
             .append("circle")
             .attr("r", 10)
             .style("fill", function (d) {
-
-                return colors[identifyRegionNode(d)]
+                var indexColor = d.in_region === undefined ? 0 : regionArray.indexOf(d.in_region);
+                return colors[indexColor]
             })
             .style("stroke", "black")
             .style("stroke-width", "1px")
